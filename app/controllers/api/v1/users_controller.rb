@@ -28,6 +28,12 @@ class Api::V1::UsersController < Api::V1::BaseController
     @user = User.find(params[:id])
   end
 
+  def user_params
+    params.require(:user).permit(:name, :avatar)
+  end
 
+  def render_error
+    render json: { errors: @user.errors.full_messages },status: :unprocessable_entity
+  end
 
 end
