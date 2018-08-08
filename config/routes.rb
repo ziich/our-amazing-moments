@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :likes, only: [] do
         collection do
           post :like
+          post :unlike
         end
       end
     end
