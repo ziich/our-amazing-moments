@@ -1,15 +1,27 @@
 class Api::V1::PostsController < Api::V1::BaseController
-  before_action :set_post, only: [:show]
+  before_action :set_post, only: [ :show, :destroy ]
 
   def index
-    @posts = Post.all
+    @posts = Post.all.order('created_at DESC')
   end
+
+  def for_current_user
+    @posts = Post.all.order('created_at DESC')
+    @posts = @posts.where(user_id: User.find(params[:user_id]))
+    render :index
+  end
+
 
   def show
   end
 
   def create
+    p "creating............................"
+    p params.inspect
+    p params['user_id']
     @post = Post.new(post_params)
+    @post.user = User.find(params['user_id'])
+    @post.date = Date.today
     if @post.save
       render :show, status: :created
     else
@@ -31,11 +43,13 @@ class Api::V1::PostsController < Api::V1::BaseController
   end
 
   def post_params
-    params.require(:post).permit(:content, :date, :user )
+    params.require(:post).permit(:content, :date )
   end
 
   def render_error
     render json: { errors: @story.errors.full_messages }, status: :unprocessable_entity
   end
+
+
 
 end
