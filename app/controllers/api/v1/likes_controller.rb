@@ -6,6 +6,12 @@ class Api::V1::LikesController < Api::V1::BaseController
     render json: {}, status: :ok
   end
 
+  def unlike
+    @post = Post.find(params[:post_id])
+    @post.unliked_by User.find(params[:user_id])
+    render json: {}, status: :ok
+  end
+
   def num_likes
     @post = Post.find(params[:post_id])
     @post.get_likes.size
