@@ -3,5 +3,5 @@ class Post < ApplicationRecord
   acts_as_votable
   has_many :photos, dependent: :destroy
   has_many :comments, dependent: :destroy
-  validates :content, :date, presence: true
+  validates :content , presence: true
 end
