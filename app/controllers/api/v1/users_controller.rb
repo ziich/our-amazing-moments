@@ -1,5 +1,5 @@
 class Api::V1::UsersController < Api::V1::BaseController
-  before_action :set_user, only: [:show, :destroy]
+  before_action :set_user, only: [:show, :destroy, :update]
   URL = "https://api.weixin.qq.com/sns/jscode2session".freeze
 
   def index
@@ -23,11 +23,19 @@ class Api::V1::UsersController < Api::V1::BaseController
     head :no_content
   end
 
+  def update
+    if @user.update(user_params)
+      render :show
+    else
+      render_error
+    end
+  end
+
   def login
-    # @user = User.find_or_create_by(open_id: wechat_user.fetch("openid"))
-    # render json: {
-    #  userId: @user.id
-    # }
+    @user = User.find_or_create_by(open_id: wechat_user.fetch("openid"))
+    render json: {
+     userId: @user.id
+    }
   end
 
   private
@@ -56,7 +64,7 @@ class Api::V1::UsersController < Api::V1::BaseController
   end
 
   def user_params
-    params.require(:user).permit(:name, :avatar)
+    params.require(:user).permit(:name, :avatar, :open_id)
   end
 
   def render_error
