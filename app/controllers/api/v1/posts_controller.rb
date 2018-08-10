@@ -43,7 +43,7 @@ class Api::V1::PostsController < Api::V1::BaseController
   end
 
   def post_params
-    params.require(:post).permit(:content, :date )
+    params.require(:post).permit(:content, :date, :image_url )
   end
 
   def render_error
