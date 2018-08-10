@@ -23,6 +23,13 @@ class Api::V1::UsersController < Api::V1::BaseController
     head :no_content
   end
 
+  def login
+    # @user = User.find_or_create_by(open_id: wechat_user.fetch("openid"))
+    # render json: {
+    #  userId: @user.id
+    # }
+  end
+
   private
 
   def wechat_params
@@ -39,15 +46,11 @@ class Api::V1::UsersController < Api::V1::BaseController
 
   def wechat_user
     @wechat_response ||= RestClient.post(URL, wechat_params)
+    p @wechat_response
     @wechat_user ||= JSON.parse(@wechat_response.body)
   end
 
-  def login
-    @user = User.find_or_create_by(open_id: wechat_user.fetch("openid"))
-    render json: {
-     userId: @user.id
-    }
-  end
+
   def set_user
     @user = User.find(params[:id])
   end
