@@ -3,8 +3,13 @@ Rails.application.routes.draw do
 # /api/v1/user/login
   namespace :api, defaults: { format: :json } do
       namespace :v1 do
-        post '/user/login', to: 'user#login'
-        resources :users, only: [ :index, :show, :create, :destroy]
+
+
+        resources :users
+
+          post '/users/login', to: 'users#login'
+
+
         resources :posts, only: [ :index, :show, :create, :destroy ] do
           collection do
             get :for_current_user
